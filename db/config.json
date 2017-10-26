@@ -1,0 +1,10 @@
+{
+    "client": "pg",
+    "version": "7.2",
+    "connection": {
+        "host" : "127.0.0.1",
+        "user" : "admin",
+        "password": "G2WWUsnZ46t96pX6",
+        "database" : "queryable_api"
+    }
+}
