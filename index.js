@@ -34,22 +34,19 @@ app.get('/providers', (req, res) => {
             return {key, val}
         })
 
-        let filterStrings = queryKeyValues.map((obj) => {
+        let filterStringArgs = queryKeyValues.map((obj) => {
             let {key, val} = obj
             let queryFilterFn = QueryFilterFns[key]
-            return queryFilterFn(val)
+            let filterStringArg = queryFilterFn(val)
+            return filterStringArg
         })
 
         let initialQueryObj = knex.select(ProviderAttrs).from("provider_summary")
-        let providerSummary = applyWhereFilters(filterStrings,initialQueryObj)
+        let providerSummary = applyWhereFilters(initialQueryObj, filterStringArgs)
 
         providerSummary
-            .then((results) => {
-                res.json(results)
-            })
-            .catch((err) => {
-                console.log('==> err', err);
-            })
+            .then((results) => { res.json(results) })
+            .catch((err) => { console.log('==> err', err); })
     }
 })
 
