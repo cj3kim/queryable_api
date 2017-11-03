@@ -6,8 +6,8 @@ import Config from "./config.json"
 import knex from "./db/knex"
 
 const app = express()
-
 const SqlResultCache = {}
+
 
 app.get('/providers', (req, res) => {
     let { query } =  req
@@ -34,10 +34,14 @@ app.get('/providers', (req, res) => {
         }
 
         let finalQueryObj = knex.select(ProviderAttrs).from("provider_summary")
-        return finalQueryObj.then((results) => {
-            SqlResultCache["fullDataSet"] = results
-            res.json(results)
-        })
+        return finalQueryObj
+            .then((results) => {
+                SqlResultCache["fullDataSet"] = results
+                res.json(results)
+            })
+            .catch((err) => {
+                res.status(500).json({ error: err.toString() });
+            })
     }
 
     // 3. Generate SQL filters (WHERE statements) from valid query values
@@ -52,13 +56,13 @@ app.get('/providers', (req, res) => {
     let initialQueryObj = knex.select(ProviderAttrs).from("provider_summary")
     let providerSummary = applyWhereFilters(initialQueryObj, filterStringArgs)
 
-    // 5. Send Query to the database and generate a response
+    // 5. Execute Sql query and generate a response
     providerSummary
         .then((results) => { res.json(results) })
         .catch((err) => {
-            console.log('==> err', err);
+            res.status(500).json({ error: err.toString() });
         })
 })
 
-let port = 3000
+let { port } = Config.server
 app.listen(port)

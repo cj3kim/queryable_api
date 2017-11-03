@@ -5,5 +5,8 @@
                 "upperBound" : 30
             }
         }
+    },
+    "server": {
+        "port": 3000
     }
 }
