@@ -1,0 +1,9 @@
+{
+    "http" : {
+        "request": {
+            "query" : {
+                "upperBound" : 30
+            }
+        }
+    }
+}
